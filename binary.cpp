@@ -1,52 +1,59 @@
-#include <iostream>
-#include <algorithm>
+#include<iostream>
+
 using namespace std;
-void binarysearch(int arr[], int start, int end, int key){
-    int mid;
-    while(start <= end){
-        mid = (start+end)/2;
-        if(arr[mid] == key){
-            int left = mid;
-            int right = mid;
-            while(arr[left] == key){
-                left--;
-            }
-            left++;
-            while(arr[right] == key){
-                right++;
-            }
-            right--;
-            cout << "The key is found from index " << left << " to index " << right << "\n";
-            cout << "The count of the key is " << (right-left+1) << "\n"; 
-            return;
-        }
-        else if(arr[mid] > key)
-            binarysearch(arr, start, mid - 1, key);
-        else    
-            binarysearch(arr, mid + 1, end, key);
-    }
-    if(start > end){
-        cout << "Key not found!\n";
-        return;
-    }
+
+int firstoccurence(int arr[], int begin, int end, int key){
+	int m, start = -1;
+	while(begin <= end){
+		m = (begin + end) / 2;
+		if(arr[m] < key)
+			begin = m+1;
+		if(arr[m] > key)
+			end = m-1;
+		if(arr[m] == key){
+			start = m;
+			end = m-1;
+		}
+	}
+	return start;
+}
+int lastoccurence(int arr[],int begin,int end,int key){
+	int m,endindex=-1;
+	while(begin<=end)
+	{
+		m=(begin+end)/2;
+		if(arr[m]<key)
+			begin=m+1;
+	 	if(arr[m]>key)
+			end=m-1;
+		if(arr[m]==key){
+			endindex=m;
+			begin=m+1;
+		}
+	}
+	return endindex;
 }
 int main(){
-    int n;
-    cout << "Enter number of elements of array:   ";
-    cin >> n;
-    int arr[n];
-    cout << "Enter elements:   ";
-    for(int i = 0; i < n; i++){
-        cin >> arr[i];
-    }
-    sort(arr, arr+n);
-    cout << "The sorted array is:  ";
-    for(int i = 0; i < n; i++){
-        cout << arr[i] << " ";
-    }
-    cout << "\n";
-    cout << "Enter key to be searched:   ";
-    int key;
-    cin >> key;
-    binarysearch(arr, 0, n - 1, key);
+	int n, j, arr[50], key, l, r, count, fo, lo;
+	cout << "Enter no of elements" << endl;
+	cin >> n;
+	cout << "Enter elements in array in sorted order" << endl;
+	for(j=0;j<n;j++)
+		cin>>arr[j];
+	cout << "Enter key element:  " << endl;
+	cin>>key;
+	l = 0;
+	r = n - 1;
+	fo = firstoccurence(arr, l, r, key);
+	lo = lastoccurence(arr, l, r, key);
+	if((fo==-1) || (lo==-1)){
+		cout << "Element not found!!" << endl;
+	}
+	else{
+		cout << "First occurence:  "<< fo << endl;
+		cout << "Last occurence:  "<< lo << endl;
+	}
+	count = (lo - fo) + 1;
+	cout << "Total occurences:  " << count << endl;	
+	return 0;
 }
