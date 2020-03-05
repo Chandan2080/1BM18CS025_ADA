@@ -1,51 +1,64 @@
-#include<iostream>
-using namespace std;
-void insert_sort(int fi[],int n){
-    int i, value, j;
-    for(i=1;i<n;i++){
-        value = fi[i];
-        j = i;
-        while(j>0 && fi[j-1] > value){
-            fi[j] = fi[j-1];
-            j--;
-        }
-        fi[j] = value;
-    }
-}
+// CPP program to find maxium number of meetings 
+#include <iostream> 
+#include<vector>
+#include <bits/stdc++.h>
+using namespace std; 
+
+struct meeting { 
+	int start; 
+	int end; 
+	int pos; 
+}; 
+
+bool comparator(struct meeting m1, meeting m2){ 
+	return (m1.end < m2.end); 
+} 
+
+void maxMeeting(int s[], int f[], int n){ 
+	struct meeting meet[n]; 
+	for (int i = 0; i < n; i++){ 
+		
+		meet[i].start = s[i]; 
+		
+		meet[i].end = f[i]; 
+		
+		meet[i].pos = i + 1; 
+	} 
+
+	sort(meet, meet + n, comparator); 
+
+	vector<int> m; 
+
+	m.push_back(meet[0].pos); 
+
+	int time_limit = meet[0].end; 
+
+	for (int i = 1; i < n; i++) { 
+		if (meet[i].start >= time_limit) 
+		{ 
+			m.push_back(meet[i].pos); 
+			
+			time_limit = meet[i].end; 
+		} 
+	} 
+
+	for (int i = 0; i < m.size(); i++) { 
+		cout << m[i] << " "; 
+	} 
+} 
+
 int main(){
-    int n, i, value, j;
-    cout<<"Enter the number of meetings:  ";
-    cin>>n;
-    int si[n], fi[n], arr[n], arr1[n];
-    cout<<"Enter start time and finish time of meetings:  ";
-    for(i=0;i<n;i++){
-        cin>>si[i]>>fi[i];
-    }
-    for(i=0;i<n;i++) arr[i]=fi[i];
-    insert_sort(fi,n);
-    cout<<"Sorted array is (finish time):"<<endl;
-    for(i=0;i<n;i++)  cout<<fi[i]<<" ";
-    for(i=0;i<n;i++){
-        for(j=0;j<n;j++){
-            if(fi[i]==arr[j] && arr[j]!=-1){
-                arr[j]=-1;
-                break;
-            }
-        }
-        arr1[i]=si[j];
-    }
-    cout<<endl;
-    i = 0;
-    j = 0;
-    while(i<n){
-        cout<<"Meeting no: "<<i+1<<endl;
-        cout<<"Pair "<<arr1[i]<<", "<<fi[i]<<endl;
-        value = fi[i];
-        while(arr1[j]<value && j<n)
-        {
-            j++;
-        }
-        i = j;
-    }
-    return 0;
-}
+	int n, s[50],f[50];
+	cout<<"Enter the number of meetings:  ";
+	cin>>n;
+	
+	for(int i=0; i<n;i++){
+		cout<<"Meeting"<<(i+1)<<":   ";
+		cin>>s[i]>>f[i];
+		cout<<endl;
+	}
+
+	maxMeeting(s, f, n); 
+
+	return 0; 
+} 
