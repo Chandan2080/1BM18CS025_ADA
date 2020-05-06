@@ -1,64 +1,40 @@
 #include<iostream>
+#include<string.h>
 using namespace std;
-int maximum(int a,int b){
-return (a>b)?a:b;
-}
-int knapsack(int n,int m,int p[],int w[]){
-    int v[n+1][m+1];int x[n];
-for(int i=0;i<=n;i++){
-    for(int j=0;j<=m;j++){
-        if(i==0 || j==0){
-            v[i][j]=0;
+int max (int x, int y) { return (x > y)? x : y; }
+int lpalin(string str)
+{
+   int n = str.length();
+
+   int t[n][n];
+for (int x = 0; x< n; x++)
+      t[x][x] = 1;
+
+for (int p=2; p<=n; p++)
+    {
+        for (int i=0; i<n-p+1; i++)
+        {
+           int j = i+p-1;
+            if(str[i]==str[j] && p==2){
+                t[i][j]=2;
+            }
+             else if (str[i] == str[j]){
+                t[i][j] = t[i+1][j-1] + 2;
+             }
+               else{
+               t[i][j] = max(t[i][j-1], t[i+1][j]);
+               }
         }
-        else if(w[i-1]<=m){
-            v[i][j]=maximum(v[i-1][j],v[i-1][j-w[i-1]]+p[i-1]);
-        }
-       else{
-            v[i][j]=v[i-1][j];
+    }
 
-       }
+    return t[0][n-1];
+}
 
 
-    }
-}
-for(int i=1;i<=n;i++){
-    x[i]=0;
-}
-int i=n,j=m;
-while(i!=0 && j!=0){
-    if(v[i][j]!=v[i-1][j]){
-        x[i]=1;
-        j=j-w[i];
-    }
-    i--;
-}
-for(int i=1;i<=n;i++){
-    if(x[i]==1){
-        cout<<"item "<<i<<" is selected"<<endl;
-    }
-    else{
-        cout<<"item "<<i<<" is not selected"<<endl;
-    }
-}
-return v[n][m];
-}
 int main(){
-int n,m;
-cout<<"Enter the no. of items: \n";
-cin>>n;
-int p[n],w[n];
-cout<<"Enter the capacity of the bag: \n";
-cin>>m;
-
-cout<<"Enter the weights of the items: \n";
-for(int i=0;i<n;i++){
-    cin>>w[i];
-}
-cout<<"Enter the profits of the items: \n";
-for(int i=0;i<n;i++){
-    cin>>p[i];
-}
-cout<<"The max profit is: "<<knapsack(n,m,p,w)<<endl;
+    string s;
+    cout<<"Enter the string: "<<endl;
+    cin>>s;
+    cout<<"The length of the longest palindromic subsequence is: "<<lpalin(s)<<endl;
 return 0;
-
 }
